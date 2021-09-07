@@ -1,6 +1,6 @@
 package com.busleiman.products.service;
 
-import com.busleiman.products.domain.Product;
+import com.busleiman.products.domain.entities.Product;
 
 import java.util.List;
 

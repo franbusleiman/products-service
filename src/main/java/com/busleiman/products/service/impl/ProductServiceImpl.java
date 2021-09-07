@@ -1,6 +1,6 @@
 package com.busleiman.products.service.impl;
 
-import com.busleiman.products.domain.Product;
+import com.busleiman.products.domain.entities.Product;
 import com.busleiman.products.persistance.ProductRepository;
 import com.busleiman.products.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

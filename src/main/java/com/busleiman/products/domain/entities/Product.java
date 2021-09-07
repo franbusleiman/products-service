@@ -1,13 +1,10 @@
-package com.busleiman.products.domain;
+package com.busleiman.products.domain.entities;
 
 
 import lombok.*;
-import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
-
 
 
 @Getter
@@ -26,11 +23,25 @@ public class Product {
 
     @Column(name = "name")
     private String name;
-    
+
     @Column(name = "create_at")
     private LocalDate createAt;
 
     @Column(name = "price")
     private Double price;
+
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST,
+            optional = false)
+    @JoinColumn(name = "factory_id",
+            nullable = false)
+    private Factory factory;
+
+    @ManyToOne(fetch = FetchType.LAZY,
+            optional = false,
+            cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "section_id",
+            nullable = false)
+    private Section section;
 
 }

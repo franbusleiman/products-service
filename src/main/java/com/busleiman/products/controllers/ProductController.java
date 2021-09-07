@@ -1,6 +1,6 @@
 package com.busleiman.products.controllers;
 
-import com.busleiman.products.domain.Product;
+import com.busleiman.products.domain.entities.Product;
 import com.busleiman.products.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
