@@ -1,6 +1,6 @@
 package com.busleiman.products.domain.entities;
 
-import com.busleiman.products.domain.Edibility;
+import com.busleiman.products.domain.enums.Edibility;
 import lombok.*;
 
 import javax.persistence.*;

@@ -2,6 +2,7 @@ package com.busleiman.products.domain.dtos;
 
 import com.busleiman.products.domain.dtos.validationsGroups.Action;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -12,7 +13,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 public class FactoryDTO {
 
     @NotBlank(message = "The field must not be null", groups = {Action.Create.class})
@@ -30,10 +31,4 @@ public class FactoryDTO {
     @NotBlank(message = "The field must not be null", groups = {Action.Create.class})
     @Size(min = 2, message = "The name must have almost 2 chars", groups = {Action.Create.class, Action.Update.class})
     private String address;
-
-    @NotNull(message = "The field must not be null", groups = {Action.Create.class})
-    private Long factoryId;
-
-    @NotNull(message = "The field must not be null", groups = {Action.Create.class})
-    private Long sectionId;
 }

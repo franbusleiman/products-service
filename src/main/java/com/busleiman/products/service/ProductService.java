@@ -1,18 +1,20 @@
 package com.busleiman.products.service;
 
+import com.busleiman.products.domain.dtos.ProductDTO;
+import com.busleiman.products.domain.dtos.responses.ProductResponse;
 import com.busleiman.products.domain.entities.Product;
 
 import java.util.List;
 
 public interface ProductService {
 
-     Product findById(Long id);
+     ProductResponse findById(Long id);
 
-     List<Product> findAll();
+     List<ProductResponse> findAll();
 
-     Product createProduct(Product product);
+     Long createProduct(ProductDTO productDTO);
 
      void deleteProduct(Long id);
 
-     Product updateProduct(Product product, Long id);
+     void updateProduct(ProductDTO productDTO, Long id);
 }

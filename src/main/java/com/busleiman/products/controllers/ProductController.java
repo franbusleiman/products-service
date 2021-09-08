@@ -1,5 +1,7 @@
 package com.busleiman.products.controllers;
 
+import com.busleiman.products.domain.dtos.ProductDTO;
+import com.busleiman.products.domain.dtos.responses.ProductResponse;
 import com.busleiman.products.domain.entities.Product;
 import com.busleiman.products.service.ProductService;
 import org.slf4j.Logger;
@@ -23,7 +25,7 @@ public class ProductController {
     Logger logger = LoggerFactory.getLogger(ProductController.class);
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) throws InterruptedException {
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable("id") Long id) throws InterruptedException {
 
         logger.info("Looking for a product");
 
@@ -31,28 +33,30 @@ public class ProductController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Product>> getProducts(){
+    public ResponseEntity<List<ProductResponse>> getProducts(){
 
         return ResponseEntity.ok(productService.findAll());
     }
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Product> createProduct(@RequestBody Product product){
+    public ResponseEntity<Void> createProduct(@RequestBody ProductDTO productDTO){
 
-        Product product1 = productService.createProduct(product);
+        Long productId = productService.createProduct(productDTO);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(product1.getId())
+                .buildAndExpand(productId)
                 .toUri();
 
-        return ResponseEntity.created(location).body(product1);
+        return ResponseEntity.created(location).build();
     }
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id,
-                                                 @RequestBody Product product){
+                                                 @RequestBody ProductDTO productDTO){
 
-        return ResponseEntity.ok(productService.updateProduct(product, id));
+        productService.updateProduct(productDTO, id);
+
+        return ResponseEntity.status(204).build();
     }
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id){

@@ -3,6 +3,7 @@ package com.busleiman.products.domain.dtos;
 
 import com.busleiman.products.domain.dtos.validationsGroups.Action;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -13,7 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 public class ProductDTO {
 
     @NotBlank(message = "The field must not be null", groups = {Action.Create.class})
@@ -23,4 +24,10 @@ public class ProductDTO {
     @NotNull(message = "The field must not be null", groups = {Action.Create.class})
     @Min(value = 1, message = "The price should not be less than 1", groups = {Action.Create.class, Action.Update.class})
     private Double price;
+
+    @NotNull(message = "The field must not be null", groups = {Action.Create.class})
+    private Long factoryId;
+
+    @NotNull(message = "The field must not be null", groups = {Action.Create.class})
+    private Long sectionId;
 }

@@ -1,4 +1,4 @@
-package com.busleiman.products.domain;
+package com.busleiman.products.domain.enums;
 
 public enum Edibility {
 
