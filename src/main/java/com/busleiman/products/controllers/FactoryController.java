@@ -34,9 +34,15 @@ public class FactoryController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<FactoryResponse>> getFactorys() {
+    public ResponseEntity<List<FactoryResponse>> getFactories() {
 
         return ResponseEntity.ok(factoryService.findAll());
+    }
+
+    @GetMapping(value = "/min/{productNumber}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<FactoryResponse>> getFactoriesWithMoreProductThan(@PathVariable("productNumber") int productNumber) {
+
+        return ResponseEntity.ok(factoryService.findAllWithMoreThanXProducts(productNumber));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)

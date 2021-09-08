@@ -4,6 +4,7 @@ import com.busleiman.products.domain.dtos.SectionDTO;
 import com.busleiman.products.domain.dtos.responses.SectionResponse;
 import com.busleiman.products.domain.entities.Product;
 import com.busleiman.products.domain.entities.Section;
+import com.busleiman.products.domain.enums.Edibility;
 import com.busleiman.products.domain.mappers.SectionMapper;
 import com.busleiman.products.exceptions.NotFoundException;
 import com.busleiman.products.persistance.SectionRepository;
@@ -34,9 +35,24 @@ public class SectionServiceImpl implements SectionService{
 
     @Override
     public List<SectionResponse> findAll() {
-        List<Section> sectionList = (List<Section>) sectionRepository.findAll();
 
-        return sectionList.stream()
+        return sectionRepository.findAll().stream()
+                .map(section -> sectionMapper.sectionToSectionResponse(section))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SectionResponse> findAllEatables() {
+        return sectionRepository.findAll().stream()
+                .filter(section -> section.getEdibility().equals(Edibility.EATABLE))
+                .map(section -> sectionMapper.sectionToSectionResponse(section))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SectionResponse> findAllNonEatables() {
+        return sectionRepository.findAll().stream()
+                .filter(section -> section.getEdibility().equals(Edibility.NON_EATABLE))
                 .map(section -> sectionMapper.sectionToSectionResponse(section))
                 .collect(Collectors.toList());
     }

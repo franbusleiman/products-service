@@ -32,9 +32,18 @@ public class FactoryServiceImpl implements FactoryService {
 
     @Override
     public List<FactoryResponse> findAll() {
-        List<Factory> factoryList = (List<Factory>) factoryRepository.findAll();
 
-        return factoryList.stream()
+        return factoryRepository.findAll().stream()
+                .map(factory -> factoryMapper.factoryToFactoryResponse(factory))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FactoryResponse> findAllWithMoreThanXProducts(int productQuantity) {
+
+        return factoryRepository.findAll()
+                .stream()
+                .filter(factory -> factory.getProductList().size() >= productQuantity)
                 .map(factory -> factoryMapper.factoryToFactoryResponse(factory))
                 .collect(Collectors.toList());
     }

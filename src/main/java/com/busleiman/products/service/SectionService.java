@@ -13,6 +13,10 @@ public interface SectionService {
 
     List<SectionResponse> findAll();
 
+    List<SectionResponse> findAllEatables();
+
+    List<SectionResponse> findAllNonEatables();
+
     Long create(SectionDTO sectionDTO);
 
     void delete(Long id);

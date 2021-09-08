@@ -11,6 +11,8 @@ public interface FactoryService {
 
     List<FactoryResponse> findAll();
 
+    List<FactoryResponse> findAllWithMoreThanXProducts(int productQuantity);
+
     Long create(FactoryDTO factoryDTO);
 
     void delete(Long id);

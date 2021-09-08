@@ -39,6 +39,18 @@ public class SectionController {
         return ResponseEntity.ok(sectionService.findAll());
     }
 
+    @GetMapping(value = "/eatables", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<SectionResponse>> getSectionsEatabales() {
+
+        return ResponseEntity.ok(sectionService.findAllEatables());
+    }
+
+    @GetMapping(value = "/nonEatables", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<SectionResponse>> getSectionsNonEatabales() {
+
+        return ResponseEntity.ok(sectionService.findAllNonEatables());
+    }
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createSection(@Validated(Action.Create.class) @RequestBody SectionDTO sectionDTO) {
 
