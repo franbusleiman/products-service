@@ -7,6 +7,4 @@ import java.util.Optional;
 
 @Repository
 public interface FactoryRepository extends JpaRepository<Factory, Long> {
-
-    Optional<Factory> findFactoryByProductId(Long productId);
 }

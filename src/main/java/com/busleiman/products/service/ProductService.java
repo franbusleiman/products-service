@@ -12,9 +12,9 @@ public interface ProductService {
 
      List<ProductResponse> findAll();
 
-     Long createProduct(ProductDTO productDTO);
+     Long create(ProductDTO productDTO);
 
-     void deleteProduct(Long id);
+     void delete(Long id);
 
-     void updateProduct(ProductDTO productDTO, Long id);
+     void update(ProductDTO productDTO, Long id);
 }

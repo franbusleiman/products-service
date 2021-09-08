@@ -54,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Long createProduct(ProductDTO productDTO) {
+    public Long create(ProductDTO productDTO) {
 
         Factory factory = factoryRepository.findById(productDTO.getFactoryId())
                 .orElseThrow(() -> new NotFoundException("Factory not found with id: " + productDTO.getFactoryId()));
@@ -80,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProduct(Long id) {
+    public void delete(Long id) {
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Product not found with id: " + id));
@@ -89,7 +89,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(ProductDTO productDTO, Long id) {
+    public void update(ProductDTO productDTO, Long id) {
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
