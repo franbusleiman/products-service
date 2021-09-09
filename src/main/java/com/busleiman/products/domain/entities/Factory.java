@@ -12,8 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Builder
 @Getter
 @Setter
+@EqualsAndHashCode(exclude = "products")
 public class Factory {
 
     @Id

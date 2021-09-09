@@ -46,9 +46,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponse> findAll() {
 
-        List<Product> productList = (List<Product>) productRepository.findAll();
-
-        return productList.stream()
+        return productRepository.findAll()
+                .stream()
                 .map(product -> productMapper.productToProductResponse(product))
                 .collect(Collectors.toList());
     }
@@ -67,6 +66,7 @@ public class ProductServiceImpl implements ProductService {
         product.setCreateAt(LocalDate.now());
 
         if (factory.getProductList() == null) factory.setProductList(new ArrayList<>());
+
 
         factory.getProductList().add(product);
         product.setFactory(factory);
@@ -99,7 +99,13 @@ public class ProductServiceImpl implements ProductService {
                     .orElseThrow(() -> new NotFoundException("Section not found with id: " + productDTO.getSectionId()));
 
             if (product.getSection().getId() != section.getId()) {
-                product.getSection().getProductList().remove(product);
+
+                Section section1 = product.getSection();
+
+                section1.getProductList().remove(product);
+
+                sectionRepository.save(section1);
+
                 if (section.getProductList() == null) section.setProductList(new ArrayList<>());
                 section.getProductList().add(product);
                 product.setSection(section);

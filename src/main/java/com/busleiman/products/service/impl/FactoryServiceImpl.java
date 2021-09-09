@@ -43,7 +43,7 @@ public class FactoryServiceImpl implements FactoryService {
 
         return factoryRepository.findAll()
                 .stream()
-                .filter(factory -> factory.getProductList().size() >= productQuantity)
+                .filter(factory -> factory.getProductList() != null && factory.getProductList().size() >= productQuantity)
                 .map(factory -> factoryMapper.factoryToFactoryResponse(factory))
                 .collect(Collectors.toList());
     }
