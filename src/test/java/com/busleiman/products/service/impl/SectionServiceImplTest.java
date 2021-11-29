@@ -1,9 +1,7 @@
 package com.busleiman.products.service.impl;
 
 import com.busleiman.products.domain.dtos.SectionDTO;
-import com.busleiman.products.domain.dtos.responses.FactoryResponse;
 import com.busleiman.products.domain.dtos.responses.SectionResponse;
-import com.busleiman.products.domain.entities.Factory;
 import com.busleiman.products.domain.entities.Product;
 import com.busleiman.products.domain.entities.Section;
 import com.busleiman.products.domain.enums.Edibility;

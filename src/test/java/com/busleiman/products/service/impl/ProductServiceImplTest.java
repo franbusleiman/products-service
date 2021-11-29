@@ -10,7 +10,6 @@ import com.busleiman.products.exceptions.NotFoundException;
 import com.busleiman.products.persistance.FactoryRepository;
 import com.busleiman.products.persistance.ProductRepository;
 import com.busleiman.products.persistance.SectionRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

@@ -29,6 +29,6 @@ public class Section {
 
     @OneToMany(fetch = FetchType.LAZY,
     cascade = CascadeType.ALL,
-    mappedBy = "section_id")
+    mappedBy = "section")
     private List<Product> productList;
 }

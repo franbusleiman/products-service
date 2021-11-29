@@ -2,13 +2,9 @@ package com.busleiman.products.service.impl;
 
 import com.busleiman.products.domain.dtos.FactoryDTO;
 import com.busleiman.products.domain.dtos.responses.FactoryResponse;
-import com.busleiman.products.domain.dtos.responses.ProductResponse;
 import com.busleiman.products.domain.entities.Factory;
 import com.busleiman.products.domain.entities.Product;
-import com.busleiman.products.domain.entities.Section;
 import com.busleiman.products.persistance.FactoryRepository;
-import com.sun.org.apache.xpath.internal.Arg;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -22,7 +18,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -182,6 +179,7 @@ class FactoryServiceImplTest {
                 .name(NAME)
                 .build();
     }
+
     private Product getProduct() {
         return Product.builder()
                 .id(ID)
