@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +49,8 @@ class ProductServiceImplTest {
     private static final Double PRICE = 123.22;
     private static final String NAME2 = "name2";
     private static final Double PRICE2 = 223.22;
+    private static final String NAME3 = "a123";
+    private static final Double PRICE3 = 29.00;
     private static final LocalDate DATE = LocalDate.now();
     private static final String ADDRESS = "Address";
     private static final String EMAIL = "email@gmail.com";
@@ -58,7 +61,7 @@ class ProductServiceImplTest {
 
     @Test
     void findById() {
-        when(productRepository.findById(anyLong())).thenReturn(Optional.of(getProduct()));
+        when(productRepository.findById(anyLong())).thenReturn(Optional.of(getProduct(NAME, PRICE)));
 
         ProductResponse productResponse = productService.findById(1L);
 
@@ -80,7 +83,7 @@ class ProductServiceImplTest {
 
     @Test
     void findAll() {
-        when(productRepository.findAll()).thenReturn(Collections.singletonList(getProduct()));
+        when(productRepository.findAll()).thenReturn(Collections.singletonList(getProduct(NAME, PRICE)));
 
         List<ProductResponse> productResponses = productService.findAll();
 
@@ -91,10 +94,38 @@ class ProductServiceImplTest {
     }
 
     @Test
+    void findAllOrderedByName() {
+        when(productRepository.findAll()).thenReturn(Arrays.asList(getProduct(NAME, PRICE), getProduct(NAME2, PRICE2), getProduct(NAME3, PRICE3)));
+
+        List<ProductResponse> productResponses = productService.findAllOrderedByName();
+
+        verify(productRepository, times(1)).findAll();
+
+        assertEquals(3, productResponses.size());
+        assertEquals(NAME3, productResponses.get(0).getName());
+        assertEquals(NAME, productResponses.get(1).getName());
+        assertEquals(NAME2, productResponses.get(2).getName());
+    }
+
+    @Test
+    void findAllOrderedByPrice() {
+        when(productRepository.findAll()).thenReturn(Arrays.asList(getProduct(NAME, PRICE), getProduct(NAME2, PRICE2), getProduct(NAME3, PRICE3)));
+
+        List<ProductResponse> productResponses = productService.findAllOrderedByPrice();
+
+        verify(productRepository, times(1)).findAll();
+
+        assertEquals(3, productResponses.size());
+        assertEquals(PRICE3, productResponses.get(0).getPrice());
+        assertEquals(PRICE, productResponses.get(1).getPrice());
+        assertEquals(PRICE2, productResponses.get(2).getPrice());
+    }
+
+    @Test
     void create() {
         when(sectionRepository.findById(anyLong())).thenReturn(Optional.of(getSection()));
         when(factoryRepository.findById(anyLong())).thenReturn(Optional.of(getFactory()));
-        when(productRepository.save(any())).thenReturn(getProduct());
+        when(productRepository.save(any())).thenReturn(getProduct(NAME, PRICE));
 
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
 
@@ -117,7 +148,7 @@ class ProductServiceImplTest {
 
     @Test
     void delete() {
-        when(productRepository.findById(anyLong())).thenReturn(Optional.of(getProduct()));
+        when(productRepository.findById(anyLong())).thenReturn(Optional.of(getProduct(NAME, PRICE)));
 
         productService.delete(1L);
 
@@ -126,7 +157,7 @@ class ProductServiceImplTest {
 
     @Test
     void update() {
-        when(productRepository.findById(anyLong())).thenReturn(Optional.of(getProduct()));
+        when(productRepository.findById(anyLong())).thenReturn(Optional.of(getProduct(NAME, PRICE)));
         when(sectionRepository.findById(anyLong())).thenReturn(Optional.of(getSection2()));
 
         ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
@@ -164,12 +195,12 @@ class ProductServiceImplTest {
                 .build();
     }
 
-    private Product getProduct() {
+    private Product getProduct(String name, Double price) {
         return Product.builder()
                 .id(ID)
                 .createAt(DATE)
-                .price(PRICE)
-                .name(NAME)
+                .price(price)
+                .name(name)
                 .factory(Factory.builder()
                         .id(ID)
                         .address(ADDRESS)

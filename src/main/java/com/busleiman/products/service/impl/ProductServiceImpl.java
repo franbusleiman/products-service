@@ -1,5 +1,7 @@
 package com.busleiman.products.service.impl;
 
+import com.busleiman.products.domain.comparators.ProductNameComparator;
+import com.busleiman.products.domain.comparators.ProductPriceComparator;
 import com.busleiman.products.domain.dtos.ProductDTO;
 import com.busleiman.products.domain.dtos.responses.ProductResponse;
 import com.busleiman.products.domain.entities.Factory;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +33,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private SectionRepository sectionRepository;
+
+    private ProductNameComparator nameComparator = ProductNameComparator.INSTANCE;
+
+    private ProductPriceComparator priceComparator = ProductPriceComparator.INSTANCE;
 
     private ProductMapper productMapper = ProductMapper.INSTANCE;
 
@@ -48,6 +55,24 @@ public class ProductServiceImpl implements ProductService {
 
         return productRepository.findAll()
                 .stream()
+                .map(product -> productMapper.productToProductResponse(product))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductResponse> findAllOrderedByName() {
+        return productRepository.findAll()
+                .stream()
+                .sorted(nameComparator)
+                .map(product -> productMapper.productToProductResponse(product))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductResponse> findAllOrderedByPrice() {
+        return productRepository.findAll()
+                .stream()
+                .sorted(priceComparator)
                 .map(product -> productMapper.productToProductResponse(product))
                 .collect(Collectors.toList());
     }

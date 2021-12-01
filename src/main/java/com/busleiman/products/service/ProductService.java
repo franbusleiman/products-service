@@ -12,6 +12,10 @@ public interface ProductService {
 
      List<ProductResponse> findAll();
 
+     List<ProductResponse> findAllOrderedByName();
+
+     List<ProductResponse> findAllOrderedByPrice();
+
      Long create(ProductDTO productDTO);
 
      void delete(Long id);
