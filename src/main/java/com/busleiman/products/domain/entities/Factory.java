@@ -36,7 +36,7 @@ public class Factory {
     private String address;
 
     @OneToMany(mappedBy = "factory",
-    cascade = CascadeType.ALL)
+    cascade = CascadeType.REMOVE)
     @Column(name = "products_list")
     private List<Product> productList;
 }

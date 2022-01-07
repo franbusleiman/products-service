@@ -3,14 +3,22 @@ package com.busleiman.products.persistance;
 import com.busleiman.products.domain.entities.Factory;
 import com.busleiman.products.domain.entities.Product;
 import com.busleiman.products.domain.entities.Section;
+
+import org.junit.jupiter.api.*;
+
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -20,53 +28,104 @@ class ProductRepositoryTest {
     ProductRepository productRepository;
 
     @Autowired
-    FactoryRepository factoryRepository;
-
-    @Autowired
     SectionRepository sectionRepository;
 
+    @Autowired
+    FactoryRepository factoryRepository;
+
+
+    Factory factoryA;
+    Section sectionA;
+    Section sectionB;
+    Product productA;
+    Product productB;
+    Product productC;
+    Product productD;
+
+    List<Product> productList;
+
+    @BeforeEach
+    public void init() {
+
+        factoryA = factoryRepository.save(new Factory("factoryA"));
+
+        sectionA = sectionRepository.save(new Section("sectionA"));
+
+        sectionB = sectionRepository.save(new Section("sectionB"));
+
+        productA = Product.builder()
+                .name("productA")
+                .section(sectionA)
+                .factory(factoryA)
+                .build();
+
+        productB = Product.builder()
+                .name("productB")
+                .section(sectionA)
+                .factory(factoryA)
+                .build();
+
+        productC = Product.builder()
+                .name("productC")
+                .section(sectionB)
+                .factory(factoryA)
+                .build();
+
+        productD = Product.builder()
+                .name("productD")
+                .section(sectionB)
+                .factory(factoryA)
+                .build();
+
+        productList = Arrays.asList(productA, productB, productC, productD);
+    }
+
+    @AfterEach
+    public void teardown() {
+        productRepository.deleteAll();
+        sectionRepository.deleteAll();
+        factoryRepository.deleteAll();
+    }
+
     @Test
-    void cascadePersistTest(){
+    public void shouldNotAutomaticallySetTheOneToManySide() {
 
-         Factory factory = factoryRepository.save(getFactory());
-         Section section = sectionRepository.save(getSection());
+        productRepository.saveAll(productList);
 
-        Product product = getProduct();
+        Section sectionASaved = sectionRepository.findById(sectionA.getId()).get();
 
-        product.setFactory(factory);
-        product.setSection(section);
+        assertNull(sectionASaved.getProductList());
 
-        factory.setProductList(Collections.singletonList(product));
-        section.setProductList(Collections.singletonList(product));
-
-        productRepository.save(product);
-
-        Factory factory2  = factoryRepository.findAll().get(0);
-        Section section2 = sectionRepository.findAll().get(0);
-
-        assertEquals("my product", factory2.getProductList().get(0).getName());
-        assertEquals("my product", section2.getProductList().get(0).getName());
-        assertNotNull(factory2.getProductList().get(0).getId());
-        assertNotNull(section2.getProductList().get(0).getId());
+        assertEquals(sectionA.getId(), productA.getSection().getId());
     }
 
+    @Test
+    public void cascadeShouldPersistTheProductOnTheOneToManySide() {
 
-    private Product getProduct(){
-        return Product.builder()
-                .name("my product")
-                .build();
+        sectionA.setProductList(Arrays.asList(productA, productB));
+        sectionB.setProductList(Arrays.asList(productC, productD));
+
+        productRepository.saveAll(productList);
+
+        Product productA1 = productRepository.findByName("productA").get();
+        Product productB1 = productRepository.findByName("productB").get();
+
+
+        Section sectionASaved = sectionRepository.findById(sectionA.getId()).get();
+
+        assertEquals(productA1.getId(), sectionASaved.getProductList().get(0).getId());
+        assertEquals(productB1.getId(), sectionASaved.getProductList().get(1).getId());
+
     }
 
-    private Factory getFactory(){
-        return Factory.builder()
-                .name("my factory")
-                .build();
-    }
+    @Test
+    public void cascadeTypeRemoveShouldDeleteAllProducts() {
+        factoryA.setProductList(Arrays.asList(productA, productB, productC, productD));
 
-    private Section getSection(){
-        return Section.builder()
-                .name("my section")
-                .build();
-    }
+        productRepository.saveAll(productList);
 
+        factoryRepository.deleteById(factoryA.getId());
+
+        assertEquals(0, productRepository.findAll().size());
+    }
 }

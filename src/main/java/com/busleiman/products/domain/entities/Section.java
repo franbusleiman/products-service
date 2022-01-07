@@ -28,7 +28,7 @@ public class Section {
     private Edibility edibility;
 
     @OneToMany(fetch = FetchType.LAZY,
-    cascade = CascadeType.ALL,
+    cascade = CascadeType.REMOVE,
     mappedBy = "section")
     private List<Product> productList;
 }
